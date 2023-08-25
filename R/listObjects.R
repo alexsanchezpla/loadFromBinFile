@@ -19,7 +19,13 @@
 #'
 #' @export
 listObjects <- function(fileName) {
-  loaded_objects <- get(load(fileName))
+  # Create an empty environment
+  obj_env <- new.env()
+  # Load objects into the environment
+  loaded_objects <- load(fileName, envir = obj_env)
+  # List objects in the environment
+  object_names <- ls(envir = obj_env)
+  
   object_info <- data.frame(
     ObjectName = character(),
     ObjectType = character(),
