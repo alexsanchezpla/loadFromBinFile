@@ -22,7 +22,7 @@ listObjects <- function(fileName) {
   # Create an empty environment
   obj_env <- new.env()
   # Load objects into the environment
-  loaded_objects <- load(fileName, envir = obj_env)
+  load(fileName, envir = obj_env)
   # List objects in the environment
   object_names <- ls(envir = obj_env)
   
@@ -32,15 +32,17 @@ listObjects <- function(fileName) {
     ObjectDimensions = character(),
     stringsAsFactors = FALSE
   )
-  names4Cols <- colnames(object_info)
-  for (obj_name in names(loaded_objects)) {
-    obj <- loaded_objects[[obj_name]]
+  
+  for (obj_name in object_names) {
+    obj <- obj_env[[obj_name]]
     obj_type <- class(obj)[1]
     obj_dims <- paste(dim(obj), collapse = "x")
     object_info <- rbind(object_info, c(obj_name, obj_type, obj_dims))
   }
-  colnames(object_info) <- names4Cols
-
+  
+  colnames(object_info) <- c("ObjectName", "ObjectType", "ObjectDimensions")
+ # object_info <- object_info[-1,]  # Remove the first row of initial empty values
+  
   return(object_info)
 }
 
